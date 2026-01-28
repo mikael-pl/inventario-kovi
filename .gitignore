@@ -1,0 +1,11 @@
+bin/
+.buildozer/
+*.pyc
+__pycache__/
+.DS_Store
+inventario.db
+*.apk
+*.aab
+.idea/
+venv/
+env/

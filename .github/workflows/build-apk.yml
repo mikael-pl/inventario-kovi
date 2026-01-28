@@ -1,0 +1,38 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-pip build-essential git zlib1g-dev \
+          libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev \
+          libffi-dev wget libbz2-dev libsqlite3-dev
+        pip3 install --upgrade pip
+        pip3 install buildozer cython==0.29.36
+    
+    - name: Build with Buildozer
+      run: |
+        cd "$GITHUB_WORKSPACE"
+        buildozer android debug
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: inventario-kovi-apk
+        path: bin/*.apk
